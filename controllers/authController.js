@@ -87,7 +87,8 @@ const login = async (req = request, res = response) => {
             ok: true,
             msg: `Login success`,
             token,
-            uid: user._id.toString()
+            uid: user._id.toString(),
+            name: user.name
         })
     }
 
