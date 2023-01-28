@@ -1,16 +1,16 @@
-const {request, response} = require("express");
+const { request, response } = require("express");
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const {JSONWebTokenGenerator} = require("../helpers/JWT");
+const { JSONWebTokenGenerator } = require("../helpers/JWT");
 
 const registerUser = async (req = request, res = response) => {
-    const {name, email, password} = req.body;
+    const { name, email, password } = req.body;
     const userData = {
         name,
         email,
     };
 
-    const user = await User.findOne({email: email});
+    const user = await User.findOne({ email: email });
 
     if (!user) {
         // Generando el numero de saltos
@@ -56,7 +56,7 @@ const registerUser = async (req = request, res = response) => {
 
 const renewToken = async (req = request, res = response) => {
 
-    const {uid, name} = req;
+    const { uid, name } = req;
 
     const renewedToken = await JSONWebTokenGenerator(uid, name);
 
@@ -68,9 +68,9 @@ const renewToken = async (req = request, res = response) => {
 };
 
 const login = async (req = request, res = response) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
-    const user = await User.findOne({email: email});
+    const user = await User.findOne({ email: email });
     if (!user) {
         return res.status(400).json({
             ok: false,
@@ -83,10 +83,11 @@ const login = async (req = request, res = response) => {
         // Generating token
         const token = await JSONWebTokenGenerator(user._id, user.name);
 
-        return res.status(202).json({
+        return res.status(200).json({
             ok: true,
             msg: `Login success`,
             token,
+            uid: user._id.toString()
         })
     }
 
