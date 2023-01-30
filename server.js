@@ -11,6 +11,7 @@ class Server {
         this.paths = {
             authPath: '/api/auth',
             calendarPath: '/api/calendar',
+            anyOtherRoute : '*'
         }
         this.dbConnection();
         this.middlewares();
@@ -34,6 +35,9 @@ class Server {
     routes() {
         this.app.use(this.paths.authPath, require('./routes/authRoutes'));
         this.app.use(this.paths.calendarPath, require('./routes/calendarEvents'));
+        this.app.get(this.paths.anyOtherRoute, (req, res) => { 
+            res.sendFile(__dirname + "/public/index.html");
+        })
     }
 
 
