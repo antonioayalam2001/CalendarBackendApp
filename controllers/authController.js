@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const { JSONWebTokenGenerator } = require("../helpers/JWT");
 
 const registerUser = async (req = request, res = response) => {
-    const { name, email, password } = req.body;
+const { name, email, password } = req.body;
     const userData = {
         name,
         email,

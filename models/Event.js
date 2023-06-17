@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const eventSchema = Schema({
     title: {
@@ -21,13 +21,16 @@ const eventSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true
-
+    },
+    privacy: {
+        type: String,
+        default: 'public'
     }
 });
 
 
 eventSchema.methods.toJSON = function () {
-    const {__v, _id, ...user} = this.toObject();
+    const { __v, _id, ...user } = this.toObject();
     user.id = _id;
     return user;
 }

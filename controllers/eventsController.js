@@ -3,7 +3,7 @@ const Event = require('../models/Event');
 
 
 const getAllEvents = async (req = request, res = response) => {
-    const events = await Event.find({user: req.uid}).populate({path: 'user', select: ['name']});
+    const events = await Event.find().populate({path: 'user', select: ['name']});
 
     res.status(200).json({
         ok: true,
@@ -11,10 +11,10 @@ const getAllEvents = async (req = request, res = response) => {
     })
 };
 const createEvent = async (req = request, res = response) => {
-    const {title, notes, start, end} = req.body;
+    const {title, notes, start, end , privacy = 'public'} = req.body;
     // Since the user is logged and the JWT was a valid one we have access to the uid
     const {uid} = req;
-    const event = await new Event({title, notes, start, end, user: uid});
+    const event = await new Event({title, notes, start, end, user: uid , privacy});
     console.log(new Date(start).toString())
     try {
         const savedEvent = await event.save();
@@ -38,7 +38,7 @@ const updateEvent = async (req = request, res = response) => {
     // api/calendar/:id
     const {id} = req.params;
     // Getting the info from the body
-    const {title, notes, start, end} = req.body;
+    const {title, notes, start, end , privacy = 'public'} = req.body;
     // Getting the previous element
     let prevEvent = await Event.findById(id);
 
@@ -65,7 +65,8 @@ const updateEvent = async (req = request, res = response) => {
             title,
             notes,
             start,
-            end
+            end,
+            privacy
         }, {returnDocument: "after"});
 
         res.status(200).json({
